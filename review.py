@@ -70,7 +70,8 @@ def get_review():
 
       # Calculate the number of tokens needed for the prompt
       tokens_needed = len(prompt.split(' '))
-      patch_tokens = min(2000, max(50, int(tokens_needed * 1.5)))
+      max_tokens = min(2000, max(50, int(tokens_needed * 1.5)))
+      patch_tokens = min(4097, max_tokens) # Apply the maximum context length constraint
 
       response = openai.Completion.create(
         engine=model,
