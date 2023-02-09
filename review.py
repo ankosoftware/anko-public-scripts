@@ -61,23 +61,19 @@ def get_review():
   
   # model = "text-ada-001"
   model = "text-davinci-003"
+  patch_tokens = 1000  # need to calcualte tokens
   
   patch_contents = split_patch_file_content(patch)
     
   for file_patch, line_number in patch_contents:   
       question = "Review this diff code change and suggest possible improvements and issues, provide fix example? \n"
       prompt = question + file_patch
-
-      # Calculate the number of tokens needed for the prompt
-      tokens_needed = len(prompt.split(' '))
-      max_tokens = min(2000, max(50, int(tokens_needed * 1.5)))
-      patch_tokens = min(4097, max_tokens) # Apply the maximum context length constraint
-
+        
       response = openai.Completion.create(
         engine=model,
         prompt=prompt,
         temperature=0.9,
-        max_tokens=patch_tokens,
+        max_tokens=patch_tokens, # TODO: need to find a dynamic way of setting this according to the prompt
         top_p=1.0,
         frequency_penalty=0.0,
         presence_penalty=0.0
