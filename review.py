@@ -39,6 +39,11 @@ def split_patch_file_content(patch_text):
         files.append(('\n'.join(current_file), i))
     return files
 
+def split_prompt(prompt, max_tokens):
+    tokens = prompt.strip().split()
+    chunks = [tokens[i:i + max_tokens] for i in range(0, len(tokens), max_tokens)]
+    return chunks
+
 def get_review():
   github_env = os.getenv("GITHUB_ENV")
     
@@ -61,41 +66,43 @@ def get_review():
   
   # model = "text-ada-001"
   model = "text-davinci-003"
-  patch_tokens = 1000  # need to calcualte tokens
+  patch_tokens = 4097 # need to calcualte tokens
   
   patch_contents = split_patch_file_content(patch)
     
   for file_patch, line_number in patch_contents:   
-      question = "Review this diff code change and suggest possible improvements and issues, provide fix example? \n"
-      prompt = question + file_patch
-        
-      response = openai.Completion.create(
-        engine=model,
-        prompt=prompt,
-        temperature=0.9,
-        max_tokens=patch_tokens, # TODO: need to find a dynamic way of setting this according to the prompt
-        top_p=1.0,
-        frequency_penalty=0.0,
-        presence_penalty=0.0
-      )
-      review = response['choices'][0]['text']
+    question = "Review this diff code change and suggest possible improvements and issues, provide fix example? \n"
+    chunks = split_prompt(question + file_patch, patch_tokens)
 
-      headers = {
-        'Accept': 'application/vnd.github+json',
-        'Authorization': f'Bearer {ACCESS_TOKEN}',
-        'Content-Type': 'application/x-www-form-urlencoded',
-      }
+    for chunk in chunks:
+        prompt = " ".join(chunk)
+        response = openai.Completion.create(
+            engine=model,
+            prompt=prompt,
+            temperature=0.9,
+            max_tokens=patch_tokens,
+            top_p=1.0,
+            frequency_penalty=0.0,
+            presence_penalty=0.0
+        )
+        review = response['choices'][0]['text']
 
-      data = {"body": review, "line": line_number}
-      data = json.dumps(data)
+        headers = {
+            'Accept': 'application/vnd.github+json',
+            'Authorization': f'Bearer {ACCESS_TOKEN}',
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+
+        data = {"body": review, "line": line_number}
+        data = json.dumps(data)
 
 
-      OWNER = pr_link.split("/")[-4]
-      REPO = pr_link.split("/")[-3]
-      PR_NUMBER = pr_link.split("/")[-1]
+        OWNER = pr_link.split("/")[-4]
+        REPO = pr_link.split("/")[-3]
+        PR_NUMBER = pr_link.split("/")[-1]
 
-      response = requests.post(f'https://api.github.com/repos/{OWNER}/{REPO}/issues/{PR_NUMBER}/comments', headers=headers, data=data)
-      print(response.json())
+        response = requests.post(f'https://api.github.com/repos/{OWNER}/{REPO}/issues/{PR_NUMBER}/comments', headers=headers, data=data)
+        print(response.json())
 
 
 if __name__ == "__main__":
