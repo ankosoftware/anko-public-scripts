@@ -61,16 +61,14 @@ def get_review():
   
   # model = "text-ada-001"
   model = "text-davinci-003"
-  #patch_tokens = 4000  # need to calcualte tokens
+  patch_tokens = 1000  # need to calcualte tokens
   
   patch_contents = split_patch_file_content(patch)
     
   for file_patch, line_number in patch_contents:   
       question = "Review this diff code change and suggest possible improvements and issues, provide fix example? \n"
       prompt = question + file_patch
-      max_length = openai.Completion.maximum_length(model, prompt)
-      patch_tokens = min(max_length, openai.Completion.maximum_length(model))
-
+        
       response = openai.Completion.create(
         engine=model,
         prompt=prompt,
