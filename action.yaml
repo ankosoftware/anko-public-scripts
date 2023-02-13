@@ -13,15 +13,6 @@ jobs:
     name: Review PR
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Anko Public Scripts repository
-        uses: actions/checkout@v2
-        with:
-          repository: ankosoftware/anko-public-scripts
-          ref: develop
-      - name: Display working directory files
-        run: |
-          echo "Working directory files:"
-          ls -al
       - name: Set up Python 3.8
         uses: actions/setup-python@v2
         with:
