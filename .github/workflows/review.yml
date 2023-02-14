@@ -6,6 +6,7 @@ on:
     types: [created]
 jobs:
   run-local-action:
+    runs-on: ubuntu-latest
     steps:
     - name: Run checkout
       uses: actions/checkout@v2
