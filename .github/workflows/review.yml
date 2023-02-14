@@ -1,5 +1,9 @@
 name: Review PR with OpenAI GPT model
-
+on:
+  pull_request:
+    types: [opened]
+  issue_comment:
+    types: [created]
 jobs:
   run-local-action:
     runs-on: ubuntu-latest
