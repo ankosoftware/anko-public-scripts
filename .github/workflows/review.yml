@@ -6,13 +6,18 @@ on:
     types: [created]
 jobs:
   run-local-action:
+    if: |
+        github.event.pull_request ||
+        (github.event.issue.pull_request &&
+        startsWith(github.event.comment.body, 'openai'))
+    name: Review PR
     runs-on: ubuntu-latest
     steps:
-    - name: Run checkout
-      uses: actions/checkout@v2
-    - name: Display working directory files
-      run: |
-        echo "Working directory files:"
-        ls -al
-    - name: Run custom action
-      uses: ./.github/actions
+      - name: Run checkout
+        uses: actions/checkout@v2
+      - name: Display working directory files
+        run: |
+          echo "Working directory files:"
+          ls -al
+      - name: Run custom action
+        uses: ./.github/actions
