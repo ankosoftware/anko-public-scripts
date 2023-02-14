@@ -1,0 +1,31 @@
+name: "Review PR with OpenAI GPT model"
+description: "Review PR with OpenAI GPT model"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: Install dependencies
+      shell: bash
+      run: |
+        sudo apt-get update
+        python3 -m venv .env
+        source .env/bin/activate
+        python -m pip install -U pip
+        pip install -r requirements.txt
+    # - name: Review PR and make comment
+    #   shell: bash
+    #   run: |
+    #     source .env/bin/activate
+    #     PR_NUMBER="${{ github.event.pull_request.number }}"
+    #     if [ -z "$PR_NUMBER" ]; then
+    #       PR_NUMBER="${{ github.event.issue.number }}"
+    #     fi
+    #     echo "LINK=https://github.com/${{ github.repository }}/pull/$PR_NUMBER" >> $GITHUB_ENV
+    #     echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> $GITHUB_ENV
+    #     echo "GITHUB_TOKEN=${{ github.token }}" >> $GITHUB_ENV
+    #     echo "GITHUB_ACTOR=${{ github.actor }}" >> $GITHUB_ENV
+    #     python review.py

@@ -1,0 +1,12 @@
+name: Review PR with OpenAI GPT model
+on:
+  pull_request:
+    types: [opened]
+  issue_comment:
+    types: [created]
+jobs:
+  run-local-action:
+    steps:
+    - use: actions/checkout@v2
+    - name: Run custom action
+      uses: ./.github/actions/action
