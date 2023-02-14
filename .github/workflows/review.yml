@@ -21,3 +21,5 @@ jobs:
           ls -al
       - name: Run custom action
         uses: ./.github/actions
+        with:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
