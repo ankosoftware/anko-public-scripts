@@ -16,16 +16,16 @@ runs:
         source .env/bin/activate
         python -m pip install -U pip
         pip install -r requirements.txt
-    # - name: Review PR and make comment
-    #   shell: bash
-    #   run: |
-    #     source .env/bin/activate
-    #     PR_NUMBER="${{ github.event.pull_request.number }}"
-    #     if [ -z "$PR_NUMBER" ]; then
-    #       PR_NUMBER="${{ github.event.issue.number }}"
-    #     fi
-    #     echo "LINK=https://github.com/${{ github.repository }}/pull/$PR_NUMBER" >> $GITHUB_ENV
-    #     echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> $GITHUB_ENV
-    #     echo "GITHUB_TOKEN=${{ github.token }}" >> $GITHUB_ENV
-    #     echo "GITHUB_ACTOR=${{ github.actor }}" >> $GITHUB_ENV
-    #     python review.py
+    - name: Review PR and make comment
+      shell: bash
+      run: |
+        source .env/bin/activate
+        PR_NUMBER="${{ github.event.pull_request.number }}"
+        if [ -z "$PR_NUMBER" ]; then
+          PR_NUMBER="${{ github.event.issue.number }}"
+        fi
+        echo "LINK=https://github.com/${{ github.repository }}/pull/$PR_NUMBER" >> $GITHUB_ENV
+        echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> $GITHUB_ENV
+        echo "GITHUB_TOKEN=${{ github.token }}" >> $GITHUB_ENV
+        echo "GITHUB_ACTOR=${{ github.actor }}" >> $GITHUB_ENV
+        python review.py
