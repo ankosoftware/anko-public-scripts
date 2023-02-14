@@ -7,6 +7,7 @@ on:
 jobs:
   run-local-action:
     steps:
-    - use: actions/checkout@v2
+    - name: Run checkout
+      uses: actions/checkout@v2
     - name: Run custom action
       uses: ./.github/actions/action
