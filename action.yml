@@ -18,7 +18,7 @@ runs:
         python3 -m venv .env
         source .env/bin/activate
         python -m pip install -U pip
-        pip install -r requirements.txt
+        pip install -r ${{ github.action_path }}/requirements.txt
     - name: Review PR and make comment
       shell: bash
       run: |
@@ -31,4 +31,4 @@ runs:
         echo "OPENAI_API_KEY=${{ inputs.OPENAI_API_KEY }}" >> $GITHUB_ENV
         echo "GITHUB_TOKEN=${{ github.token }}" >> $GITHUB_ENV
         echo "GITHUB_ACTOR=${{ github.actor }}" >> $GITHUB_ENV
-        python review.py
+        python ${{ github.action_path }}/review.py
