@@ -1,5 +1,9 @@
 name: "Review PR with OpenAI GPT model"
 description: "Review PR with OpenAI GPT model"
+author: anko
+branding:
+  icon: 'thumbs-up'
+  color: 'white'
 inputs:
    OPENAI_API_KEY:
      required: true
