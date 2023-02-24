@@ -103,10 +103,17 @@ def get_review_v2():
 
   pr_files = get_pr_files(owner, repo, pr_number, ACCESS_TOKEN)
 
+  ignore_file_ext = ["md", "txt", "json", "snap"]
+
   for pr_file in pr_files:
     # get the file patch
     diff_hunk = pr_file["patch"]
     filename = pr_file["filename"]
+
+    # ignore files with certain extensions
+    if filename.split(".")[-1] in ignore_file_ext:
+      continue
+
     commit_id = pr_file["contents_url"].split("?")[1].split("=")[1]
 
     print(diff_hunk)
