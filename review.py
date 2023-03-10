@@ -144,7 +144,7 @@ def get_review_v2():
 
 def get_review_from_openai(patch):
   # model = "text-ada-001"
-  model = "gpt-turbo-3.5"
+  model = "gpt-3.5-turbo"
   patch_tokens = 1000  # need to calcualte tokens
 
   question = "Review this code patch and suggest improvements and issues, provide fix example? \n"
@@ -187,7 +187,7 @@ def get_review():
   patch = requests.get(request_link, headers=headers).text
 
   # model = "text-ada-001"
-  model = "text-davinci-003"
+  model = "gpt-3.5-turbo"
   patch_tokens = 1000  # need to calcualte tokens
 
   patch_contents = split_patch_file_content(patch)
