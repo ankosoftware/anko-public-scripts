@@ -148,20 +148,14 @@ def get_review_from_openai(patch):
   patch_tokens = 1000  # need to calcualte tokens
 
   question = "Review this code patch and suggest improvements and issues, provide fix example? \n"
-  prompt = question + patch
+  messages =  [{"role": "user",  "content": question + patch}]
 
-  response = openai.Completion.create(
-      engine=model,
-      prompt=prompt,
-      temperature=0.9,
-      # TODO: need to find a dynamic way of setting this according to the prompt
-      max_tokens=patch_tokens,
-      top_p=1.0,
-      frequency_penalty=0.0,
-      presence_penalty=0.0,
+  response = openai.ChatCompletion.create(
+      model=model,
+      messages=messages,
   )
 
-  review = response["choices"][0]["text"]
+  review = response["choices"][0]["message"]["content"]
 
   return review
 
