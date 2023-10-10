@@ -131,12 +131,14 @@ def get_review_v2():
 
       # Post the review comment to GitHub using the GitHub API
       url = f"https://api.github.com/repos/{owner}/{repo}/pulls/{pr_number}/comments"
-      response = requests.post(
-        url, headers={"Authorization": f"token {ACCESS_TOKEN}"}, json=review_comment)
 
-      if response.status_code != 201:
-        print(
-          f"Error posting review comment for {filename}: {response.json()}")
+      if review.strip() != "LGTM":
+        response = requests.post(
+          url, headers={"Authorization": f"token {ACCESS_TOKEN}"}, json=review_comment)
+  
+        if response.status_code != 201:
+          print(
+            f"Error posting review comment for {filename}: {response.json()}")
     except Exception as e:
       print(e)
       continue
@@ -221,7 +223,7 @@ def get_review():
           headers=headers,
           data=data,
       )
-    print(response.json())
+      print(response.json())
 
 
 if __name__ == "__main__":
