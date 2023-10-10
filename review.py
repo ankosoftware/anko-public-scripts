@@ -147,7 +147,7 @@ def get_review_from_openai(patch):
   model = "gpt-3.5-turbo"
   patch_tokens = 1000  # need to calcualte tokens
 
-  question = "Review this code patch and suggest improvements and issues, provide fix example? \n"
+  question = "Review this code for bugs only. Say LGTM if no critical issues found. \n"
   messages =  [{"role": "user",  "content": question + patch}]
 
   response = openai.ChatCompletion.create(
@@ -187,7 +187,7 @@ def get_review():
   patch_contents = split_patch_file_content(patch)
 
   for file_patch, line_number in patch_contents:
-    question = "Review this diff code change and suggest possible improvements and issues, provide fix example? \n"
+    question = "Review this diff code change for bugs only. Say LGTM if no critical issues found. \n"
     prompt = question + file_patch
 
     response = openai.Completion.create(
