@@ -131,12 +131,14 @@ def get_review_v2():
 
       # Post the review comment to GitHub using the GitHub API
       url = f"https://api.github.com/repos/{owner}/{repo}/pulls/{pr_number}/comments"
-      response = requests.post(
-        url, headers={"Authorization": f"token {ACCESS_TOKEN}"}, json=review_comment)
 
-      if response.status_code != 201:
-        print(
-          f"Error posting review comment for {filename}: {response.json()}")
+      if review.strip() != "LGTM":
+        response = requests.post(
+          url, headers={"Authorization": f"token {ACCESS_TOKEN}"}, json=review_comment)
+  
+        if response.status_code != 201:
+          print(
+            f"Error posting review comment for {filename}: {response.json()}")
     except Exception as e:
       print(e)
       continue
@@ -147,7 +149,7 @@ def get_review_from_openai(patch, client):
   model = "gpt-3.5-turbo"
   patch_tokens = 1000  # need to calcualte tokens
 
-  question = "Review this code patch and suggest improvements and issues, provide fix example? \n"
+  question = "Review this code diff for bugs, issues, lint errors, but ignore unused variables, say simply LGTM if no issues found: \n"
   messages =  [{"role": "user",  "content": question + patch}]
 
   response = client.chat.completions.create(
@@ -188,7 +190,7 @@ def get_review():
   patch_contents = split_patch_file_content(patch)
 
   for file_patch, line_number in patch_contents:
-    question = "Review this diff code change and suggest possible improvements and issues, provide fix example? \n"
+    question = "Review this code diff for bugs, issues, lint errors, but ignore unused variables, say simply LGTM if no issues found: \n"
     prompt = question + file_patch
 
     response = client.chat.completions.create(
@@ -216,12 +218,13 @@ def get_review():
     REPO = pr_link.split("/")[-3]
     PR_NUMBER = pr_link.split("/")[-1]
 
-    response = requests.post(
-        f"https://api.github.com/repos/{OWNER}/{REPO}/issues/{PR_NUMBER}/comments",
-        headers=headers,
-        data=data,
-    )
-    print(response.json())
+    if review.strip() != "LGTM":
+      response = requests.post(
+          f"https://api.github.com/repos/{OWNER}/{REPO}/issues/{PR_NUMBER}/comments",
+          headers=headers,
+          data=data,
+      )
+      print(response.json())
 
 
 if __name__ == "__main__":
