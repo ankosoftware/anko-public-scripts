@@ -16,6 +16,5 @@ class TestExtractFirstChangedLineNumber(unittest.TestCase):
     result = extract_first_changed_line_number(diff)
     self.assertEqual(result, expected)
 
-
 if __name__ == '__main__':
   unittest.main()
