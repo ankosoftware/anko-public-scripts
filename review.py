@@ -146,7 +146,7 @@ def get_review_v2():
 
 def get_review_from_openai(patch, client):
   # model = "text-ada-001"
-  model = "gpt-3.5-turbo"
+  model = "gpt-4-1106-preview"
   patch_tokens = 1000  # need to calculated tokens
 
   question = "Review this code diff patch for bugs, issues, lint errors, but ignore unused variables, say simply LGTM if no issues found: \n"
