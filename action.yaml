@@ -25,6 +25,8 @@ runs:
         pip install -r ${{ github.action_path }}/requirements.txt
     - name: Review PR and make comment
       shell: bash
+      env:
+        OPENAI_API_KEY: ${{ inputs.OPENAI_API_KEY }}
       run: |
         source .envp/bin/activate
         PR_NUMBER="${{ github.event.pull_request.number }}"
