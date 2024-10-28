@@ -146,9 +146,9 @@ def get_review_v2():
 
 def get_review_from_openai(patch, client):
   # model = "text-ada-001"
-  model = "gpt-3.5-turbo-1106"
+  model = "gpt-4o-mini-2024-07-18"
 
-  question = "Review this code diff patch for bugs, issues, lint errors, but ignore unused variables, use clean code principles, what can be improved for readability, say simply LGTM if no issues found: \n"
+  question = "Review this code diff patch for bugs, issues, lint errors,, but ignore unused variables. Find potential issues with this code. What can be improved for readability, say simply LGTM if no issues found: \n"
   messages =  [{"role": "user",  "content": question + patch}]
 
   response = client.chat.completions.create(
@@ -183,7 +183,7 @@ def get_review():
   patch = requests.get(request_link, headers=headers).text
 
   # model = "text-ada-001"
-  model = "gpt-3.5-turbo"
+  model = "gpt-4o-mini-2024-07-18"
   patch_tokens = 1000  # need to calcualte tokens
 
   patch_contents = split_patch_file_content(patch)
